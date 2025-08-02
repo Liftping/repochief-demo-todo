@@ -29,5 +29,8 @@
   "devDependencies": {
     "mocha": "^10.2.0",
     "chai": "^4.3.10"
+  },
+  "repository": {
+    "url": "https://github.com/liftping/repochief-demo-todo.git"
   }
 }
