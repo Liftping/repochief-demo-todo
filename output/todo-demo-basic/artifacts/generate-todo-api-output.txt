@@ -1,0 +1,127 @@
+// app.js
+const express = require('express');
+const cors = require('cors');
+const { v4: uuidv4 } = require('uuid');
+const { body, param, validationResult } = require('express-validator');
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// In-memory storage
+let todos = [];
+
+// Validation middleware
+const handleValidationErrors = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+};
+
+// Routes
+// GET /api/todos - List all todos
+app.get('/api/todos', (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    
+    const results = {
+        total: todos.length,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        data: todos.slice(startIndex, endIndex)
+    };
+    
+    res.json(results);
+});
+
+// GET /api/todos/:id - Get single todo
+app.get('/api/todos/:id', 
+    param('id').isUUID().withMessage('Invalid todo ID'),
+    handleValidationErrors,
+    (req, res) => {
+        const todo = todos.find(t => t.id === req.params.id);
+        if (!todo) {
+            return res.status(404).json({ error: 'Todo not found' });
+        }
+        res.json(todo);
+    }
+);
+
+// POST /api/todos - Create new todo
+app.post('/api/todos',
+    body('title').trim().notEmpty().isLength({ max: 200 }).withMessage('Title is required (max 200 chars)'),
+    body('description').optional().isLength({ max: 1000 }).withMessage('Description too long (max 1000 chars)'),
+    body('completed').optional().isBoolean().withMessage('Completed must be boolean'),
+    handleValidationErrors,
+    (req, res) => {
+        const todo = {
+            id: uuidv4(),
+            title: req.body.title,
+            description: req.body.description || '',
+            completed: req.body.completed || false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+        
+        todos.push(todo);
+        res.status(201).json(todo);
+    }
+);
+
+// PUT /api/todos/:id - Update todo
+app.put('/api/todos/:id',
+    param('id').isUUID().withMessage('Invalid todo ID'),
+    body('title').optional().trim().isLength({ max: 200 }).withMessage('Title too long (max 200 chars)'),
+    body('description').optional().isLength({ max: 1000 }).withMessage('Description too long (max 1000 chars)'),
+    body('completed').optional().isBoolean().withMessage('Completed must be boolean'),
+    handleValidationErrors,
+    (req, res) => {
+        const todoIndex = todos.findIndex(t => t.id === req.params.id);
+        if (todoIndex === -1) {
+            return res.status(404).json({ error: 'Todo not found' });
+        }
+        
+        const updatedTodo = {
+            ...todos[todoIndex],
+            ...req.body,
+            updatedAt: new Date().toISOString()
+        };
+        
+        todos[todoIndex] = updatedTodo;
+        res.json(updatedTodo);
+    }
+);
+
+// DELETE /api/todos/:id - Delete todo
+app.delete('/api/todos/:id',
+    param('id').isUUID().withMessage('Invalid todo ID'),
+    handleValidationErrors,
+    (req, res) => {
+        const todoIndex = todos.findIndex(t => t.id === req.params.id);
+        if (todoIndex === -1) {
+            return res.status(404).json({ error: 'Todo not found' });
+        }
+        
+        todos.splice(todoIndex, 1);
+        res.status(204).send();
+    }
+);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Internal server error' });
+});
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
+});
+
+module.exports = app;

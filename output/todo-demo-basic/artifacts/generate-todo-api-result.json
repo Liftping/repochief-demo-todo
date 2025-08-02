@@ -1,0 +1,42 @@
+{
+  "taskId": "generate-todo-api",
+  "timestamp": "2025-07-22T23:14:51.608Z",
+  "status": "completed",
+  "output": "// app.js\nconst express = require('express');\nconst cors = require('cors');\nconst { v4: uuidv4 } = require('uuid');\nconst { body, param, validationResult } = require('express-validator');\n\nconst app = express();\n\n// Middleware\napp.use(cors());\napp.use(express.json());\napp.use(express.urlencoded({ extended: true }));\n\n// In-memory storage\nlet todos = [];\n\n// Validation middleware\nconst handleValidationErrors = (req, res, next) => {\n    const errors = validationResult(req);\n    if (!errors.isEmpty()) {\n        return res.status(400).json({ errors: errors.array() });\n    }\n    next();\n};\n\n// Routes\n// GET /api/todos - List all todos\napp.get('/api/todos', (req, res) => {\n    const { page = 1, limit = 10 } = req.query;\n    const startIndex = (page - 1) * limit;\n    const endIndex = page * limit;\n    \n    const results = {\n        total: todos.length,\n        page: parseInt(page),\n        limit: parseInt(limit),\n        data: todos.slice(startIndex, endIndex)\n    };\n    \n    res.json(results);\n});\n\n// GET /api/todos/:id - Get single todo\napp.get('/api/todos/:id', \n    param('id').isUUID().withMessage('Invalid todo ID'),\n    handleValidationErrors,\n    (req, res) => {\n        const todo = todos.find(t => t.id === req.params.id);\n        if (!todo) {\n            return res.status(404).json({ error: 'Todo not found' });\n        }\n        res.json(todo);\n    }\n);\n\n// POST /api/todos - Create new todo\napp.post('/api/todos',\n    body('title').trim().notEmpty().isLength({ max: 200 }).withMessage('Title is required (max 200 chars)'),\n    body('description').optional().isLength({ max: 1000 }).withMessage('Description too long (max 1000 chars)'),\n    body('completed').optional().isBoolean().withMessage('Completed must be boolean'),\n    handleValidationErrors,\n    (req, res) => {\n        const todo = {\n            id: uuidv4(),\n            title: req.body.title,\n            description: req.body.description || '',\n            completed: req.body.completed || false,\n            createdAt: new Date().toISOString(),\n            updatedAt: new Date().toISOString()\n        };\n        \n        todos.push(todo);\n        res.status(201).json(todo);\n    }\n);\n\n// PUT /api/todos/:id - Update todo\napp.put('/api/todos/:id',\n    param('id').isUUID().withMessage('Invalid todo ID'),\n    body('title').optional().trim().isLength({ max: 200 }).withMessage('Title too long (max 200 chars)'),\n    body('description').optional().isLength({ max: 1000 }).withMessage('Description too long (max 1000 chars)'),\n    body('completed').optional().isBoolean().withMessage('Completed must be boolean'),\n    handleValidationErrors,\n    (req, res) => {\n        const todoIndex = todos.findIndex(t => t.id === req.params.id);\n        if (todoIndex === -1) {\n            return res.status(404).json({ error: 'Todo not found' });\n        }\n        \n        const updatedTodo = {\n            ...todos[todoIndex],\n            ...req.body,\n            updatedAt: new Date().toISOString()\n        };\n        \n        todos[todoIndex] = updatedTodo;\n        res.json(updatedTodo);\n    }\n);\n\n// DELETE /api/todos/:id - Delete todo\napp.delete('/api/todos/:id',\n    param('id').isUUID().withMessage('Invalid todo ID'),\n    handleValidationErrors,\n    (req, res) => {\n        const todoIndex = todos.findIndex(t => t.id === req.params.id);\n        if (todoIndex === -1) {\n            return res.status(404).json({ error: 'Todo not found' });\n        }\n        \n        todos.splice(todoIndex, 1);\n        res.status(204).send();\n    }\n);\n\n// Error handling middleware\napp.use((err, req, res, next) => {\n    console.error(err.stack);\n    res.status(500).json({ error: 'Internal server error' });\n});\n\n// 404 handler\napp.use((req, res) => {\n    res.status(404).json({ error: 'Route not found' });\n});\n\nmodule.exports = app;",
+  "tokensUsed": 2150,
+  "cost": 0.021500000000000002,
+  "duration": 2000,
+  "qualityScore": 1,
+  "qualityResults": {
+    "passed": true,
+    "gates": {
+      "test": {
+        "status": "skipped",
+        "reason": "Gate not available"
+      },
+      "lint": {
+        "status": "skipped",
+        "reason": "Gate not available"
+      },
+      "security": {
+        "status": "pass",
+        "issues": [],
+        "stats": {
+          "errors": 0,
+          "warnings": 0,
+          "info": 0
+        },
+        "gate": "SecurityGate",
+        "duration": 0,
+        "attempts": 1
+      }
+    },
+    "summary": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 2,
+      "errors": 0
+    }
+  }
+}

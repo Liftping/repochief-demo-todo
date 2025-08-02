@@ -1,0 +1,181 @@
+{
+  "scenarios": {
+    "basic": {
+      "name": "Basic TODO API",
+      "description": "Simple REST API with in-memory storage and tests",
+      "agents": {
+        "analyst": {
+          "template": "REQUIREMENTS_ANALYST",
+          "model": "claude-3-sonnet",
+          "maxConcurrentTasks": 1
+        },
+        "developer": {
+          "template": "SENIOR_DEVELOPER",
+          "model": "gpt-4o",
+          "maxConcurrentTasks": 2
+        },
+        "tester": {
+          "template": "QA_ENGINEER",
+          "model": "gpt-4o",
+          "maxConcurrentTasks": 2
+        }
+      },
+      "tasks": {
+        "comprehension": {
+          "maxTokens": 10000,
+          "timeout": 300000
+        },
+        "generation": {
+          "maxTokens": 50000,
+          "timeout": 600000
+        },
+        "testing": {
+          "maxTokens": 30000,
+          "timeout": 600000
+        }
+      }
+    },
+    "fullstack": {
+      "name": "Full Stack TODO App",
+      "description": "API + React frontend with quality validation",
+      "agents": {
+        "analyst": {
+          "template": "REQUIREMENTS_ANALYST",
+          "model": "claude-3-sonnet",
+          "maxConcurrentTasks": 1
+        },
+        "developer": {
+          "template": "SENIOR_DEVELOPER",
+          "model": "gpt-4o",
+          "maxConcurrentTasks": 2
+        },
+        "tester": {
+          "template": "QA_ENGINEER",
+          "model": "gpt-4o",
+          "maxConcurrentTasks": 2
+        },
+        "reviewer": {
+          "template": "CODE_REVIEWER",
+          "model": "gpt-3.5-turbo",
+          "maxConcurrentTasks": 1
+        },
+        "frontend": {
+          "role": "frontend_developer",
+          "model": "gpt-4o",
+          "capabilities": ["generation", "refactoring"],
+          "constraints": {
+            "maxContextTokens": 100000,
+            "temperature": 0.7,
+            "preferredFrameworks": ["React", "TypeScript", "Tailwind CSS"]
+          },
+          "maxConcurrentTasks": 2
+        }
+      },
+      "tasks": {
+        "comprehension": {
+          "maxTokens": 10000,
+          "timeout": 300000
+        },
+        "generation": {
+          "maxTokens": 50000,
+          "timeout": 600000
+        },
+        "testing": {
+          "maxTokens": 30000,
+          "timeout": 600000
+        },
+        "validation": {
+          "maxTokens": 20000,
+          "timeout": 300000
+        },
+        "frontend": {
+          "maxTokens": 40000,
+          "timeout": 600000
+        }
+      },
+      "qualityGates": ["eslint", "test", "complexity"]
+    },
+    "enterprise": {
+      "name": "Enterprise TODO App",
+      "description": "Production-ready app with auth, DB, and containerization",
+      "agents": {
+        "analyst": {
+          "template": "REQUIREMENTS_ANALYST",
+          "model": "claude-3-opus",
+          "maxConcurrentTasks": 1
+        },
+        "developer": {
+          "template": "SENIOR_DEVELOPER",
+          "model": "gpt-4o",
+          "maxConcurrentTasks": 3
+        },
+        "tester": {
+          "template": "QA_ENGINEER",
+          "model": "gpt-4o",
+          "maxConcurrentTasks": 2
+        },
+        "reviewer": {
+          "template": "CODE_REVIEWER",
+          "model": "gpt-4o",
+          "maxConcurrentTasks": 1
+        },
+        "frontend": {
+          "role": "frontend_developer",
+          "model": "gpt-4o",
+          "capabilities": ["generation", "refactoring"],
+          "constraints": {
+            "maxContextTokens": 100000,
+            "temperature": 0.7,
+            "preferredFrameworks": ["Next.js", "TypeScript", "Tailwind CSS", "React Query"]
+          },
+          "maxConcurrentTasks": 2
+        }
+      },
+      "tasks": {
+        "comprehension": {
+          "maxTokens": 15000,
+          "timeout": 300000
+        },
+        "generation": {
+          "maxTokens": 75000,
+          "timeout": 900000
+        },
+        "testing": {
+          "maxTokens": 40000,
+          "timeout": 600000
+        },
+        "validation": {
+          "maxTokens": 25000,
+          "timeout": 300000
+        },
+        "frontend": {
+          "maxTokens": 60000,
+          "timeout": 900000
+        }
+      },
+      "qualityGates": ["eslint", "test", "complexity", "security"],
+      "features": {
+        "authentication": true,
+        "database": "postgresql",
+        "containerization": true,
+        "cicd": true
+      }
+    }
+  },
+  "defaults": {
+    "mockResponses": {
+      "comprehension": {
+        "duration": 5000,
+        "output": "# TODO API Requirements Analysis\n\n## Overview\nThe TODO API is a RESTful service for managing tasks...\n\n## Data Model\n- id (UUID)\n- title (string, required)\n- description (string, optional)\n- completed (boolean)\n- createdAt (timestamp)\n- updatedAt (timestamp)\n\n## Endpoints\n- GET /todos - List all todos\n- GET /todos/:id - Get single todo\n- POST /todos - Create todo\n- PUT /todos/:id - Update todo\n- DELETE /todos/:id - Delete todo"
+      },
+      "generation": {
+        "duration": 10000,
+        "output": "// Generated Express.js TODO API code\nconst express = require('express');\nconst app = express();\n\n// ... full implementation ..."
+      },
+      "testing": {
+        "duration": 8000,
+        "output": "// Generated test suite\nconst { expect } = require('chai');\n\ndescribe('TODO API', () => {\n  // ... comprehensive tests ...\n});"
+      }
+    }
+  }
+}

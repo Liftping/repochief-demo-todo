@@ -1,0 +1,32 @@
+{
+  "session": "todo-demo-basic",
+  "timestamp": "2025-07-22T23:14:53.612Z",
+  "tasks": [
+    {
+      "taskId": "comprehend-todo-api",
+      "status": "completed",
+      "tokensUsed": 450,
+      "cost": 0.0045000000000000005,
+      "timestamp": "2025-07-22T23:14:49.603Z"
+    },
+    {
+      "taskId": "generate-todo-api",
+      "status": "completed",
+      "tokensUsed": 2150,
+      "cost": 0.021500000000000002,
+      "timestamp": "2025-07-22T23:14:51.608Z"
+    },
+    {
+      "taskId": "test-todo-api",
+      "status": "completed",
+      "tokensUsed": 1850,
+      "cost": 0.018500000000000003,
+      "timestamp": "2025-07-22T23:14:53.610Z"
+    }
+  ],
+  "totalTasks": 3,
+  "completedTasks": 3,
+  "failedTasks": 0,
+  "totalCost": 0.044500000000000005,
+  "totalTokens": 4450
+}

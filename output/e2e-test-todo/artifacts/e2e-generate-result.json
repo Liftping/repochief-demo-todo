@@ -1,0 +1,11 @@
+{
+  "taskId": "e2e-generate",
+  "timestamp": "2025-07-22T23:15:19.089Z",
+  "status": "completed",
+  "output": "Mock response for generation: Generate TODO API code",
+  "tokensUsed": 100,
+  "cost": 0.001,
+  "duration": 2000,
+  "qualityScore": 0.95,
+  "qualityResults": null
+}

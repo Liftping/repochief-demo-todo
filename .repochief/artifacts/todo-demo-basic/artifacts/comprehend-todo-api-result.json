@@ -1,0 +1,11 @@
+{
+  "taskId": "comprehend-todo-api",
+  "timestamp": "2025-07-22T23:29:03.076Z",
+  "status": "completed",
+  "output": "# TODO API Requirements Analysis\n\n## Overview\nThe TODO API requires a RESTful implementation with standard CRUD operations for managing tasks.\n\n## Data Model\n```javascript\n{\n  id: string (UUID),\n  title: string (required, max 200 chars),\n  description: string (optional, max 1000 chars),\n  completed: boolean (default: false),\n  createdAt: ISO 8601 timestamp,\n  updatedAt: ISO 8601 timestamp\n}\n```\n\n## Endpoints\n- GET /api/todos - List all todos (with pagination)\n- GET /api/todos/:id - Get single todo\n- POST /api/todos - Create new todo\n- PUT /api/todos/:id - Update todo\n- DELETE /api/todos/:id - Delete todo\n\n## Technical Requirements\n1. Express.js framework\n2. Input validation using express-validator\n3. Proper HTTP status codes\n4. JSON request/response format\n5. Error handling middleware\n6. CORS support\n7. Request logging",
+  "tokensUsed": 450,
+  "cost": 0.0045000000000000005,
+  "duration": 2000,
+  "qualityScore": 0.95,
+  "qualityResults": null
+}

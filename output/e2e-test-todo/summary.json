@@ -1,0 +1,32 @@
+{
+  "session": "e2e-test-todo",
+  "timestamp": "2025-07-22T23:15:21.094Z",
+  "tasks": [
+    {
+      "taskId": "e2e-comprehend",
+      "status": "completed",
+      "tokensUsed": 450,
+      "cost": 0.0045000000000000005,
+      "timestamp": "2025-07-22T23:15:17.086Z"
+    },
+    {
+      "taskId": "e2e-generate",
+      "status": "completed",
+      "tokensUsed": 100,
+      "cost": 0.001,
+      "timestamp": "2025-07-22T23:15:19.089Z"
+    },
+    {
+      "taskId": "e2e-test",
+      "status": "completed",
+      "tokensUsed": 1850,
+      "cost": 0.018500000000000003,
+      "timestamp": "2025-07-22T23:15:21.093Z"
+    }
+  ],
+  "totalTasks": 3,
+  "completedTasks": 3,
+  "failedTasks": 0,
+  "totalCost": 0.024000000000000004,
+  "totalTokens": 2400
+}
