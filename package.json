@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "TODO App Demo Scenario for RepoChief - Demonstrates AI agent swarm capabilities",
   "main": "src/index.js",
-  "private": true,
   "scripts": {
     "demo": "node src/run-demo.js",
     "demo:mock": "MOCK_MODE=true node src/run-demo.js",
